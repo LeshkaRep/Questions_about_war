@@ -15,4 +15,22 @@
 - SQLITE3
 - OpenAI API (через OpenRouter)
 - HTML5/CSS3
+Для того чтобы подключить нейросеть заходим на - https://openrouter.ai/
+и слева сверху пишем turbo
+https://imgur.com/a/OvUmpKB
+заходим в раздел API и нажимаем Create API KEY
+https://imgur.com/a/Js5Uo14
+затем нажимаем на Create Key
+и заполняем данные 
+https://imgur.com/a/5u025Ff
+у нас появляется апи и мы его копируем, затем заходим в папку под названием assistant и открыем utils.py
+и в переменную api_key вставляем то, что мы только что сгенерировали 
+https://imgur.com/a/rNWZ4iG
+прописываем
+python manage.py migrate
+python manage.py runserver
+переходим на http://localhost:8000/
+и воуля!У нас всё работает
+
+
 
