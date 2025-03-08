@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Исторический помощник</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --bg-color: #f5f7fa;
+            --text-color: #2c3e50;
+            --card-bg: white;
+            --border-color: #ddd;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --card-bg: #2d2d2d;
+            --border-color: #404040;
+            --primary-color: #3498db;
+        }
+        
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .search-section {
+            margin-bottom: 30px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        
+        button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .examples-section {
+            margin: 25px 0;
+            border-top: 2px dashed var(--border-color);
+            padding-top: 25px;
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .example-card {
+            padding: 15px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.95em;
+        }
+
+        .example-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--secondary-color);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+
+        .examples-title {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .response-section {
+            margin-top: 30px;
+        }
+        
+        .response-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .response-card.db::before {
+            content: "📚 База данных";
+            color: #27ae60;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .response-card.ai::before {
+            content: "🤖 ИИ-ассистент";
+            color: #2980b9;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .event-item {
+            padding: 15px;
+            background: var(--bg-color);
+            border-radius: 6px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .event-date {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-switcher" onclick="toggleTheme()">🌓</div>
+    <div class="container">
+        <h1>🏛️ Исторический помощник</h1>
+        
+        <div class="search-section">
+            <form method="post">
+                {% csrf_token %}
+                <div class="search-box">
+                    <input type="text" 
+                           name="query" 
+                           id="searchInput"
+                           placeholder="Введите ваш вопрос о ВОВ или истории Татнефти..." 
+                           required>
+                    <button type="submit">🔍 Поиск</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="examples-section">
+            <div class="examples-title">
+                <i class="fas fa-lightbulb"></i> Примеры запросов:
+            </div>
+            <div class="examples-grid">
+                <div class="example-card" onclick="fillExample('Основные сражения ВОВ в 1943 году')">
+                    Основные сражения ВОВ в 1943 году
+                </div>
+                <div class="example-card" onclick="fillExample('Когда был основан Татнефть?')">
+                    Когда был основан Татнефть?
+                </div>
+                <div class="example-card" onclick="fillExample('Роль нефтяной промышленности в ВОВ')">
+                    Роль нефтяной промышленности в ВОВ
+                </div>
+                <div class="example-card" onclick="fillExample('Известные ветераны из Татарстана')">
+                    Известные ветераны из Татарстана
+                </div>
+            </div>
+        </div>
+
+        {% if response %}
+        <div class="response-section">
+            <div class="response-card {{ response.type }}">
+                {% if response.type == 'db' %}
+                    {% for event in response.content %}
+                    <div class="event-item">
+                        <div class="event-date">{{ event.date|date:"d.m.Y" }}</div>
+                        <h3>{{ event.title }}</h3>
+                        <p>{{ event.description }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="ai-response">
+                        {{ response.content|linebreaks }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+
+       
+        function fillExample(text) {
+            document.getElementById('searchInput').value = text;
+            document.getElementById('searchInput').focus();
+        }
+    </script>
+</body>
+</html>
