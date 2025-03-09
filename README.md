@@ -26,7 +26,7 @@
 - у нас появляется апи и мы его копируем, затем заходим в папку под названием assistant и открыем utils.py
 - и в переменную api_key вставляем то, что мы только что сгенерировали 
 - https://imgur.com/a/rNWZ4iG
-- прописываем
+- прописываем в терминале
 - python manage.py migrate
 - python manage.py runserver
 - переходим на http://localhost:8000/
